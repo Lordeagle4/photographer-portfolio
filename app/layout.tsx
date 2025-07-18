@@ -2,6 +2,7 @@ import './globals.css'
 import { Inter } from 'next/font/google'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
+import { ThemeProvider } from '@/components/ThemeContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -40,8 +41,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
 <body className={`${inter.className} font-sans text-gray-900 dark:bg-black dark:text-gray-100 bg-white`}>
-        <Navbar />
-        <main className="min-h-screen">{children}</main>
+       <ThemeProvider>
+          <Navbar />
+          <main className="min-h-screen">{children}</main>
+        </ThemeProvider>
+        
         <Footer />
       </body>
     </html>

@@ -1,57 +1,17 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
+import { useTheme } from './ThemeContext';
 
 export default function DarkModeToggle() {
-  const [theme, setTheme] = useState<'light' | 'dark'>('light')
-
-  useEffect(() => {
-    // Check for saved theme preference in localStorage
-    const savedTheme = localStorage.getItem('theme')
-    
-    if (savedTheme) {
-      setTheme(savedTheme as 'light' | 'dark')
-    } else {
-      // Check system preference if no saved theme
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-      setTheme(prefersDark ? 'dark' : 'light')
-    }
-
-    // Listen for system theme changes
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-    const handleChange = (e: MediaQueryListEvent) => {
-      if (!localStorage.getItem('theme')) {
-        setTheme(e.matches ? 'dark' : 'light')
-      }
-    }
-
-    mediaQuery.addEventListener('change', handleChange)
-    return () => mediaQuery.removeEventListener('change', handleChange)
-  }, [])
-
-  useEffect(() => {
-    // Apply theme changes
-    const root = document.documentElement
-    if (theme === 'dark') {
-      root.classList.add('dark')
-    } else {
-      root.classList.remove('dark')
-    }
-    // Save theme preference
-    localStorage.setItem('theme', theme)
-  }, [theme])
-
-  const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark')
-  }
+  const { isDark, toggleTheme } = useTheme();
 
   return (
     <button
       onClick={toggleTheme}
       className="border px-4 py-2 rounded flex items-center gap-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-      aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+      aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
     >
-      {theme === 'dark' ? (
+      {isDark ? (
         <>
           <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
             <path
@@ -79,5 +39,5 @@ export default function DarkModeToggle() {
         </>
       )}
     </button>
-  )
+  );
 }
