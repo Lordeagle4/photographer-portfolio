@@ -24,6 +24,8 @@ export default function Navbar() {
           <Link href="/portfolio">Portfolio</Link>
           <Link href="/about">About</Link>
           <Link href="/contact">Contact</Link>
+          <DarkModeToggle />
+          <button className="mt-4" onClick={() => setOpen(false)}>Close</button>
         </div>
       )}
     </header>

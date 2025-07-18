@@ -31,7 +31,6 @@ export const metadata = {
     icon: '/favicon.ico',
     apple: '/apple-touch-icon.png',
   },
-  themeColor: '#000000',
   manifest: '/site.webmanifest',
   keywords: ['photography', 'portfolio', 'professional photographer', 'Aetos', 'landscape photography', 'portrait photography'],
 }
