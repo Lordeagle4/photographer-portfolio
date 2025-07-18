@@ -20,12 +20,12 @@ export default function Navbar() {
         <button className="md:hidden" onClick={() => setOpen(!open)}>☰</button>
       </nav>
       {open && (
-        <div className="md:hidden flex flex-col gap-4 p-4">
+        <div className="md:hidden dark:bg-gray-50 flex flex-col gap-4 p-4">
           <Link href="/portfolio">Portfolio</Link>
           <Link href="/about">About</Link>
           <Link href="/contact">Contact</Link>
           <DarkModeToggle />
-          <button className="mt-4" onClick={() => setOpen(false)}>X Close</button>
+          <button className="mt-4 hover:bg-gray-200 dark:hover:bg-gray-700" onClick={() => setOpen(false)}>X Close</button>
         </div>
       )}
     </header>
