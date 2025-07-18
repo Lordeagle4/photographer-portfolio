@@ -6,24 +6,13 @@ import { motion, AnimatePresence, Variants } from 'framer-motion'
 import { useState, useEffect } from 'react'
 import GalleryGrid from '@/components/GalleryGrid'
 import Preloader from '@/components/Preloader'
+import CameraLensHero from '@/components/hero'
 
 type FormStatus = {
   message: string;
   type: 'success' | 'error' | 'idle';
 }
 
-const heroVariants: Variants = {
-  hidden: {
-    opacity: 0,
-  },
-  visible: {
-    opacity: 1,
-    transition: {
-      duration: 1,
-      staggerChildren: 0.3
-    }
-  }
-}
 
 const textVariants: Variants = {
   hidden: { 
@@ -176,102 +165,7 @@ export default function HomePage() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <motion.section 
-              className="relative h-[90vh] flex items-center justify-center overflow-hidden"
-              variants={heroVariants}
-              initial="hidden"
-              animate="visible"
-            >
-              <motion.div
-                className="absolute inset-0 z-0"
-                initial={{ scale: 1.2 }}
-                animate={{ scale: 1 }}
-                transition={{ duration: 10 }}
-              >
-                <Image
-                  src="/images/hero.jpg"
-                  alt="Photographer Hero"
-                  fill
-                  className="object-cover brightness-[0.65] transform hover:scale-105 transition-transform duration-[2s]"
-                  priority
-                  sizes="100vw"
-                  quality={90}
-                />
-              </motion.div>
-
-              <div className="relative z-10 text-center text-white max-w-4xl px-4">
-                <motion.div variants={textVariants} className="overflow-hidden">
-                  <motion.h1
-                    className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight"
-                    initial={{ y: 100 }}
-                    animate={{ y: 0 }}
-                    transition={{ duration: 0.8, ease: [0.43, 0.13, 0.23, 0.96] }}
-                  >
-                    Capturing Moments,
-                    <br />
-                    <span className="text-3xl md:text-5xl lg:text-6xl opacity-90">
-                      Creating Stories
-                    </span>
-                  </motion.h1>
-                </motion.div>
-
-                <motion.p
-                  variants={textVariants}
-                  className="text-lg md:text-xl mb-8 text-gray-200 max-w-2xl mx-auto"
-                >
-                  Professional photography that tells your unique story through the lens of creativity and passion.
-                </motion.p>
-
-                <motion.div
-                  variants={textVariants}
-                  className="space-x-4"
-                >
-                  <Link 
-                    href="/portfolio" 
-                    className="inline-block bg-white text-black px-8 py-4 rounded-full font-semibold 
-                             hover:bg-gray-200 transition-all duration-300 transform hover:-translate-y-1
-                             hover:shadow-lg"
-                  >
-                    View My Work
-                  </Link>
-                  <Link 
-                    href="/contact" 
-                    className="inline-block bg-transparent text-white px-8 py-4 rounded-full font-semibold 
-                             border-2 border-white hover:bg-white/10 transition-all duration-300
-                             transform hover:-translate-y-1"
-                  >
-                    Let's Talk
-                  </Link>
-                </motion.div>
-              </div>
-
-              <motion.div
-                className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.5, duration: 0.8 }}
-              >
-                <motion.div
-                  animate={{ y: [0, 10, 0] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                  className="cursor-pointer"
-                  onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
-                >
-                  <svg
-                    className="w-6 h-6 text-white"
-                    fill="none"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-                  </svg>
-                </motion.div>
-              </motion.div>
-            </motion.section>
-
+           <CameraLensHero />
             <motion.section 
               className="container mx-auto px-6 py-12"
               variants={sectionVariants}
