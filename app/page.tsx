@@ -56,6 +56,31 @@ const aboutVariants: Variants = {
   }
 }
 
+const formVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+}
+
+const inputVariants: Variants = {
+  hidden: { 
+    y: 20, 
+    opacity: 0 
+  },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.5,
+      ease: [0.43, 0.13, 0.23, 0.96]
+    }
+  }
+}
+
 export default function HomePage() {
   const [status, setStatus] = useState<FormStatus>({ message: '', type: 'idle' })
   const [isLoading, setIsLoading] = useState(false)
@@ -357,61 +382,105 @@ export default function HomePage() {
             </motion.section>
             
             <motion.section 
-              className="container mx-auto px-6 py-12"
+              className="container mx-auto px-6 py-24"
               variants={sectionVariants}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-100px" }}
             >
-              <h2 className="text-4xl font-bold mb-6 text-center">Contact Me</h2>
-              <form onSubmit={handleSubmit} className="space-y-4 max-w-lg mx-auto">
-                <div>
-                  <label htmlFor="name" className="sr-only">Name</label>
+              <motion.div className="max-w-4xl mx-auto text-center mb-12" variants={itemVariants}>
+                <h2 className="text-4xl md:text-5xl font-bold mb-4">Let's Work Together</h2>
+                <p className="text-lg text-gray-600 dark:text-gray-400">
+                  Have a project in mind? I'd love to hear about it. Drop me a message and I'll get back to you as soon as possible.
+                </p>
+              </motion.div>
+
+              <motion.form 
+                onSubmit={handleSubmit} 
+                className="space-y-6 max-w-lg mx-auto backdrop-blur-sm bg-white/50 dark:bg-black/50 p-8 rounded-2xl shadow-lg"
+                variants={formVariants}
+              >
+                <motion.div variants={inputVariants}>
+                  <label htmlFor="name" className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Name</label>
                   <input 
                     id="name"
                     name="name" 
-                    placeholder="Name" 
-                    className="border w-full p-3 rounded dark:bg-black dark:border-gray-700" 
+                    placeholder="Your name" 
+                    className="w-full px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 
+                             bg-white dark:bg-gray-800 transition-colors duration-200
+                             focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white
+                             disabled:opacity-50 disabled:cursor-not-allowed" 
                     required 
                     disabled={isLoading}
                   />
-                </div>
-                <div>
-                  <label htmlFor="email" className="sr-only">Email</label>
+                </motion.div>
+
+                <motion.div variants={inputVariants}>
+                  <label htmlFor="email" className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Email</label>
                   <input 
                     id="email"
                     name="email" 
                     type="email" 
-                    placeholder="Email" 
-                    className="border w-full p-3 rounded dark:bg-black dark:border-gray-700" 
+                    placeholder="your@email.com" 
+                    className="w-full px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 
+                             bg-white dark:bg-gray-800 transition-colors duration-200
+                             focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white
+                             disabled:opacity-50 disabled:cursor-not-allowed" 
                     required 
                     disabled={isLoading}
                   />
-                </div>
-                <div>
-                  <label htmlFor="message" className="sr-only">Message</label>
+                </motion.div>
+
+                <motion.div variants={inputVariants}>
+                  <label htmlFor="message" className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Message</label>
                   <textarea 
                     id="message"
                     name="message" 
-                    placeholder="Message" 
-                    className="border w-full p-3 rounded h-32 dark:bg-black dark:border-gray-700" 
+                    placeholder="Tell me about your project..." 
+                    rows={5}
+                    className="w-full px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 
+                             bg-white dark:bg-gray-800 transition-colors duration-200
+                             focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white
+                             disabled:opacity-50 disabled:cursor-not-allowed resize-none" 
                     required 
                     disabled={isLoading}
                   />
-                </div>
-                <button 
-                  type="submit" 
-                  className="bg-black dark:bg-white dark:text-black text-white px-6 py-3 rounded hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors disabled:opacity-50"
-                  disabled={isLoading}
-                >
-                  {isLoading ? 'Sending...' : 'Send'}
-                </button>
+                </motion.div>
+
+                <motion.div variants={inputVariants}>
+                  <button 
+                    type="submit" 
+                    className="w-full bg-black dark:bg-white text-white dark:text-black px-6 py-4 rounded-lg
+                             font-semibold transition-all duration-300 transform hover:-translate-y-1
+                             hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed
+                             disabled:transform-none disabled:hover:shadow-none"
+                  >
+                    {isLoading ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                        </svg>
+                        Sending...
+                      </span>
+                    ) : 'Send Message'}
+                  </button>
+                </motion.div>
+
                 {status.message && (
-                  <p className={`text-sm ${status.type === 'success' ? 'text-green-500' : 'text-red-500'}`}>
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className={`p-4 rounded-lg ${
+                      status.type === 'success' 
+                        ? 'bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300' 
+                        : 'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300'
+                    }`}
+                  >
                     {status.message}
-                  </p>
+                  </motion.div>
                 )}
-              </form>
+              </motion.form>
             </motion.section>
           </motion.main>
         )}
