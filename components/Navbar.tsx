@@ -4,13 +4,48 @@ import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import DarkModeToggle from './DarkModeToggle'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, Variants } from 'framer-motion'
 
 const navLinks = [
   { href: '/portfolio', label: 'Portfolio' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
 ]
+
+const menuVariants: Variants = {
+  closed: {
+    opacity: 0,
+    height: 0,
+    transition: {
+      duration: 0.3,
+      ease: [0.43, 0.13, 0.23, 0.96],
+      when: "afterChildren"
+    }
+  },
+  open: {
+    opacity: 1,
+    height: "auto",
+    transition: {
+      duration: 0.4,
+      ease: [0.43, 0.13, 0.23, 0.96],
+      when: "beforeChildren",
+      staggerChildren: 0.1
+    }
+  }
+}
+
+const menuItemVariants: Variants = {
+  closed: { 
+    opacity: 0,
+    y: -10,
+    transition: { duration: 0.2 }
+  },
+  open: { 
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.3 }
+  }
+}
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
@@ -29,6 +64,11 @@ export default function Navbar() {
     window.addEventListener('keydown', handleEsc)
     return () => window.removeEventListener('keydown', handleEsc)
   }, [])
+
+  const toggleMenu = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setOpen(prev => !prev)
+  }
 
   return (
     <header className="shadow-md sticky top-0 bg-white/90 dark:bg-black/80 backdrop-blur-sm z-50">
@@ -66,42 +106,74 @@ export default function Navbar() {
         <button 
           type="button"
           className="md:hidden p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-          onClick={(e) => {
-            e.stopPropagation();
-            setOpen(!open);
-          }}
+          onClick={toggleMenu}
           aria-label={open ? 'Close menu' : 'Open menu'}
           aria-expanded={open}
         >
-          <span className="sr-only">{open ? 'Close menu' : 'Open menu'}</span>
-          {open ? '✕' : '☰'}
+          <motion.span 
+            className="sr-only"
+            initial={false}
+          >
+            {open ? 'Close menu' : 'Open menu'}
+          </motion.span>
+          <motion.div
+            initial={false}
+            animate={open ? "open" : "closed"}
+            className="relative w-6 h-6"
+          >
+            {open ? (
+              <motion.span
+                className="block w-6 h-0.5 bg-black dark:bg-white absolute"
+                style={{ rotate: 45, y: "50%" }}
+              />
+            ) : (
+              <>
+                <motion.span
+                  className="block w-6 h-0.5 bg-black dark:bg-white absolute"
+                  style={{ top: "30%" }}
+                />
+                <motion.span
+                  className="block w-6 h-0.5 bg-black dark:bg-white absolute"
+                  style={{ bottom: "30%" }}
+                />
+              </>
+            )}
+          </motion.div>
         </button>
       </nav>
 
       {/* Mobile Menu */}
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         {open && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.2 }}
+            variants={menuVariants}
+            initial="closed"
+            animate="open"
+            exit="closed"
             className="md:hidden bg-white/90 dark:bg-black/80 backdrop-blur-sm border-t dark:border-gray-800"
           >
-            <div className="container mx-auto p-4 flex flex-col gap-4">
+            <motion.div className="container mx-auto p-4 flex flex-col gap-4">
               {navLinks.map((link) => (
-                <Link
+                <motion.div
                   key={link.href}
-                  href={link.href}
-                  className={`p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors
-                    ${pathname === link.href ? 'bg-gray-100 dark:bg-gray-800' : ''}`}
-                  onClick={() => setOpen(false)}
+                  variants={menuItemVariants}
                 >
-                  {link.label}
-                </Link>
+                  <Link
+                    href={link.href}
+                    className={`block p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors
+                      ${pathname === link.href ? 'bg-gray-100 dark:bg-gray-800' : ''}`}
+                    onClick={() => setOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                </motion.div>
               ))}
-              <DarkModeToggle />
-            </div>
+              <motion.div variants={menuItemVariants}>
+                <div className="p-2">
+                  <DarkModeToggle />
+                </div>
+              </motion.div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
